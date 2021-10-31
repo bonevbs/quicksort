@@ -66,7 +66,7 @@ all: $(PROGRAMS_TESTS) # $(PROGRAMS_EXAMPLES)
 
 CC = gcc-11
 CFLAGS = -std=c++11 -fPIC -fopenmp -Wall -Wextra
-LDFLAGS = -Wl,-L,.,-lstdc++
+LDFLAGS = -Wl,-L,.,-lstdc++,-lgomp
 RM = rm
 AR = gcc-ar-11
 ARFLAGS = rcs

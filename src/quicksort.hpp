@@ -5,6 +5,10 @@
 #include <iostream>
 #include <string>
 
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
+
 template<class T>
 void print_array(T *arr, size_t len) {
     unsigned int i;
@@ -41,10 +45,12 @@ void quicksort(T *arr, size_t len) {
     }
     k = i;
     if (k > 1)
+        #pragma omp task
         quicksort(arr, k);
     while ((arr[k] == sep) && (k < len))
         k++;
     if (len - k > 1)
+        #pragma omp task
         quicksort(arr+k, len-k);
 }
 

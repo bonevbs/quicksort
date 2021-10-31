@@ -3,7 +3,9 @@
 #include <iostream>
 #include <chrono>
 
-//#define THREAD_NUM 4
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 
 using namespace std;
 using namespace std::chrono;
@@ -30,7 +32,13 @@ int runtest_integers(size_t len) {
     for (i = 0; i < len; i++) {
       arr[i] = rand()%100;
     }
-    quicksort(arr, len);
+    #pragma omp parallel
+    {
+        #pragma omp single
+        {
+            quicksort(arr, len);
+        }
+    }
     return 0;
 }
 
@@ -40,14 +48,22 @@ int runtest_strings(size_t len) {
     for (i = 0; i < len; i++) {
       arr[i] = random_string(3);
     }
-    quicksort(arr, len);
+    #pragma omp parallel
+    {
+        #pragma omp single
+        {
+            quicksort(arr, len);
+        }
+    }
     return 0;
 }
 
 int main() {
     int n = 100000;
 
-    //cout << "number of abailable threads: " << omp_get_thread_num() << endl;
+    #if defined(_OPENMP)
+    cout << "number of abailable threads: " << omp_get_max_threads() << endl;
+    #endif
 
     // test it using integers
     cout << "quick-sorting " << n << " integers: ";
