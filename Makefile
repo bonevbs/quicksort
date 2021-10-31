@@ -2,13 +2,12 @@
 # Components of the main library
 # ------------------------------------------------------------
 
-CORE = \
-	src/quicksort.cpp \
+CORE =
 	
 SOURCES_CORE := \
 	$(CORE)
 
-EXTRA_HEADERS = \
+EXTRA_HEADERS = src/quicksort.cpp
 
 HEADERS_CORE := $(SOURCES_CORE:.cpp=.hpp) $(EXTRA_HEADERS)
 
@@ -65,11 +64,11 @@ all: $(PROGRAMS_TESTS) # $(PROGRAMS_EXAMPLES)
 # Build configuration
 # ------------------------------------------------------------
 
-CC = g++
-CFLAGS = -fPIC -Wall -Wextra -std=c++11 
-LDFLAGS = -Wl, -L,.
+CC = gcc-11
+CFLAGS = -std=c++11 -fPIC -fopenmp -Wall -Wextra
+LDFLAGS = -Wl,-L,.,-lstdc++
 RM = rm
-AR = ar
+AR = gcc-ar-11
 ARFLAGS = rcs
 
 # ------------------------------------------------------------
@@ -78,9 +77,7 @@ ARFLAGS = rcs
 
 $(PROGRAMS_TESTS): %: %.o
 	echo Building $@
-	$(CC) $(LDFLAGS) $< -o $@ quicksort.a $(LIBS)
-
-$(PROGRAMS_TESTS): quicksort.a
+	$(CC) $(LDFLAGS) $< -o $@
 
 $(OBJECTS_TESTS): %.o: %.cpp
 	echo Building $@
@@ -93,14 +90,14 @@ $(OBJECTS_TESTS): Makefile
 # Rules for the main library
 # ------------------------------------------------------------
 
-quicksort.a: $(OBJECTS_CORE)
-	echo Building $@
-	$(AR) $(ARFLAGS) $@ $(OBJECTS_CORE)
+# quicksort.a: $(OBJECTS_CORE)
+# 	echo Building $@
+# 	$(AR) $(ARFLAGS) $@ $(OBJECTS_CORE)
 
-$(OBJECTS_CORE): %.o: %.cpp
-	echo Compiling $<
-	$(CC) -MT $@ -MM $< > $(<:%.cpp=%.d)
-	$(CC) $(CFLAGS) -I src -c $< -o $@
+# $(OBJECTS_CORE): %.o: %.cpp
+# 	echo Compiling $<
+# 	$(CC) -MT $@ -MM $< > $(<:%.cpp=%.d)
+# 	$(CC) $(CFLAGS) -I src -c $< -o $@
 
 -include $(DEPENDENCIES_CORE)
 $(OBJECTS_CORE): Makefile
@@ -112,4 +109,4 @@ $(OBJECTS_CORE): Makefile
 .PHONY: clean programs
 
 clean:
-	$(RM) -f $(OBJECTS) $(DEPENDENCIES) $(PROGRAMS) quicksort.a
+	$(RM) -f $(OBJECTS) $(DEPENDENCIES) $(PROGRAMS)

@@ -1,7 +1,14 @@
 #include "quicksort.hpp"
+#include <algorithm>
 #include <iostream>
+#include <chrono>
 
-std::string random_string(size_t len)
+//#define THREAD_NUM 4
+
+using namespace std;
+using namespace std::chrono;
+
+string random_string(size_t len)
 {
     auto randchar = []() -> char
     {
@@ -12,8 +19,8 @@ std::string random_string(size_t len)
         const size_t max_index = (sizeof(charset) - 1);
         return charset[ rand() % max_index ];
     };
-    std::string str(len, 0);
-    std::generate_n(str.begin(), len, randchar);
+    string str(len, 0);
+    generate_n(str.begin(), len, randchar);
     return str;
 }
 
@@ -28,7 +35,7 @@ int runtest_integers(size_t len) {
 }
 
 int runtest_strings(size_t len) {
-    std::string arr[len];
+    string arr[len];
     unsigned int i;
     for (i = 0; i < len; i++) {
       arr[i] = random_string(3);
@@ -38,20 +45,34 @@ int runtest_strings(size_t len) {
 }
 
 int main() {
-    int n = 100;
+    int n = 100000;
+
+    //cout << "number of abailable threads: " << omp_get_thread_num() << endl;
 
     // test it using integers
-    std::cout << "quick-sorting integers: ";
-    if (runtest_integers(n) == 0)
-        std::cout << "Success" << std::endl;
-    else 
-        std::cout << "Failues" << std::endl;
+    cout << "quick-sorting " << n << " integers: ";
+    auto start = high_resolution_clock::now();
+    auto status = runtest_integers(n);
+    auto end = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(end - start);
+    if (status == 0) {
+        cout << "Success" << endl;
+        cout << "execution took " << duration.count() << " nanoseconds" << endl;
+    } else {
+        cout << "Failues" << endl;
+    }
 
-    std::cout << "quick-sorting strings: ";
-    if (runtest_strings(n) == 0)
-        std::cout << "Success" << std::endl;
-    else 
-        std::cout << "Failues" << std::endl;
+    cout << "quick-sorting " << n << " strings: ";
+    start = high_resolution_clock::now();
+    status = runtest_strings(n);
+    end = high_resolution_clock::now();
+    duration = duration_cast<microseconds>(end - start);
+    if (status == 0) {
+        cout << "Success" << endl;
+        cout << "execution took " << duration.count() << " nanoseconds" << endl;
+    } else {
+        cout << "Failues" << endl;
+    }
 
     return 0;
 }
