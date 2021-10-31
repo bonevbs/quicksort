@@ -3,7 +3,8 @@
 
 template<class T>
 void print_array(T *arr, size_t len) {
-    for (int i = 0; i < len; i++) {
+    unsigned int i;
+    for (i = 0; i < len; i++) {
         if (i > 0) std::cout << " ";
         std::cout << arr[i];
     }
@@ -15,9 +16,9 @@ template<class T>
 void quicksort(T *arr, size_t len) {
     if (len <= 1)
         return;
-    int k = rand()%len; // pick a random element
+    unsigned int k = rand()%len; // pick a random element
     T sep = arr[k];
-    int i, j;
+    unsigned int i, j;
     i = 0; j = len - 1;
     while ((j > i) && (i < len) && (j >= 0)) {
         if ((arr[i] == sep) && (arr[j] == sep)) {

@@ -19,7 +19,7 @@ std::string random_string(size_t len)
 
 int runtest_integers(size_t len) {
     int arr[len];
-    unsigned long i;
+    unsigned int i;
     for (i = 0; i < len; i++) {
       arr[i] = rand()%100;
     }
@@ -29,7 +29,7 @@ int runtest_integers(size_t len) {
 
 int runtest_strings(size_t len) {
     std::string arr[len];
-    unsigned long i;
+    unsigned int i;
     for (i = 0; i < len; i++) {
       arr[i] = random_string(3);
     }
